@@ -24,6 +24,10 @@ class Controller
           default:
             $this->render('errors/404');
             break;
+          case 'user':
+            $Controller = new UserController();
+            $Controller->route();
+            break;
         }
       } else {
         //$Controller = new HomeController();

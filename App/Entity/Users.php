@@ -14,6 +14,8 @@ class Users extends Entity
   protected ?string $date = '';
   protected ?string $photo = '';
   protected ?string $role = '';
+  protected ?int $credits = 20; // Ajout de la propriété credits
+  protected ?string $pseudo = ''; // Ajout de la propriété pseudo
 
   /**
    * Get the value of id
@@ -211,6 +213,46 @@ class Users extends Entity
   public function setRole($role)
   {
     $this->role = $role;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of credits
+   */
+  public function getCredits()
+  {
+    return $this->credits;
+  }
+
+  /**
+   * Set the value of credits
+   *
+   * @return  self
+   */
+  public function setCredits($credits)
+  {
+    $this->credits = $credits;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of pseudo
+   */
+  public function getPseudo()
+  {
+    return $this->pseudo;
+  }
+
+  /**
+   * Set the value of pseudo
+   *
+   * @return  self
+   */
+  public function setPseudo($pseudo)
+  {
+    $this->pseudo = $pseudo;
 
     return $this;
   }

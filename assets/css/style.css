@@ -19,73 +19,19 @@
 .merriweather {
   font-family: "Merriweather", "Roboto", serif;
 }
-.cc-navbar {
-  font-family: "Merriweather", "Roboto", serif;
-  box-shadow: 1px 1px 3px rgba(225, 225, 225, 0.54);
-  color: rgb(55, 145, 55);
-  height: 90px;
-  background-color: white;
+body {
+  background-color: #e8f5e9; /* Vert clair pour le fond */
 }
 
-.imghead {
-  width: auto;
-  height: 1em; /* ici tu aplique la taille voulue */
-  font-size: 4.5em; /* tu change la taille de ton atl */
-  margin-top: 0; /*ici ton margin pour le centrer*/
-  margin-left: 20px; /* tout comme celui -ci */
+.card-header {
+  background-color: #388e3c; /* Vert foncé pour l'en-tête de la carte */
 }
 
-.cc-navbar .nav-link {
-  border-bottom: 1px solid transparent;
-  transition: padding-botton 0.4s ease-in-out, border-color 0.3s ease;
+.btn-success {
+  background-color: #4caf50; /* Vert pour le bouton */
+  border-color: #4caf50;
 }
 
-a {
-  text-decoration: none;
-  color: initial;
-}
-
-.cc-navbar .nav-link:hover {
-  padding-bottom: 20px;
-  border-bottom-color: rgb(55, 145, 55);
-  color: rgb(55, 145, 55);
-}
-
-.btn-order {
-  color: var(--bs-teal);
-  border-color: var(--bs-teal);
-  transition: 0.5s;
-}
-
-.btn-order:hover,
-.btn-order:focus,
-.btn-order:active {
-  color: #fff;
-  background-color: var(--bs-teal);
-}
-
-.bg-success-subtle {
-  --bs-bg-opacity: 0.3;
-  background-color: rgba(
-    var(--bs-success-rgb),
-    var(--bs-bg-opacity)
-  ) !important;
-}
-
-.box {
-  display: inline-block;
-  height: 300px;
-}
-
-.img-cover {
-  max-height: 280px;
-  width: 100%;
-}
-
-/*style image carousel*/
-.carousel-img {
-  width: 350px;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 20px;
+.btn-success:hover {
+  background-color: #45a049; /* Vert plus foncé pour le bouton au survol */
 }
