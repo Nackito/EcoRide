@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Redressed&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Merienda:wght@300..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Redressed&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+.kanit {
+  font-family: "Kanit", "Roboto", Arial, Helvetica, sans-serif;
+}
+
+.merienda {
+  font-family: "Merienda", "Trebuchet MS", "Lucida Sans Unicode",
+    "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+}
+.roboto {
+  font-family: "Roboto", sans-serif;
+}
+.redressed {
+  font-family: "Redressed", Arial, Helvetica, sans-serif;
+}
+
+.merriweather {
+  font-family: "Merriweather", "Roboto", serif;
+}
+.cc-navbar {
+  font-family: "Merriweather", "Roboto", serif;
+  box-shadow: 1px 1px 3px rgba(225, 225, 225, 0.54);
+  color: rgb(55, 145, 55);
+  height: 90px;
+  background-color: white;
+}
+
+.imghead {
+  width: auto;
+  height: 1em; /* ici tu aplique la taille voulue */
+  font-size: 4.5em; /* tu change la taille de ton atl */
+  margin-top: 0; /*ici ton margin pour le centrer*/
+  margin-left: 20px; /* tout comme celui -ci */
+}
+
+.cc-navbar .nav-link {
+  border-bottom: 1px solid transparent;
+  transition: padding-botton 0.4s ease-in-out, border-color 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  color: initial;
+}
+
+.cc-navbar .nav-link:hover {
+  padding-bottom: 20px;
+  border-bottom-color: rgb(55, 145, 55);
+  color: rgb(55, 145, 55);
+}
+
+.btn-order {
+  color: var(--bs-teal);
+  border-color: var(--bs-teal);
+  transition: 0.5s;
+}
+
+.btn-order:hover,
+.btn-order:focus,
+.btn-order:active {
+  color: #fff;
+  background-color: var(--bs-teal);
+}
+
+.bg-success-subtle {
+  --bs-bg-opacity: 0.3;
+  background-color: rgba(
+    var(--bs-success-rgb),
+    var(--bs-bg-opacity)
+  ) !important;
+}
+
+.box {
+  display: inline-block;
+  height: 300px;
+}
+
+.img-cover {
+  max-height: 280px;
+  width: 100%;
+}
+
+/*style image carousel*/
+.carousel-img {
+  width: 350px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+}
