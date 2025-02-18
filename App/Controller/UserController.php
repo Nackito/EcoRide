@@ -17,14 +17,17 @@ class UserController extends Controller
           case 'register':
             $this->register();
             break;
-          case 'edit':
-            //$this->edit();
+          case 'profile':
+            $this->profile();
             break;
           case 'delete':
             //$this->delete();
             break;
+          case 'edit':
+            $this->edit();
+            break;
           default:
-            throw new Exception("Cette action n'existe pas ok : " . $_GET['action']);
+            throw new Exception("Cette action n'existe pas : " . $_GET['action']);
         }
       } else {
         throw new Exception("Aucune action détectée");
@@ -35,6 +38,7 @@ class UserController extends Controller
       ]);
     }
   }
+
   public function register()
   {
     $errors = [];
@@ -42,10 +46,18 @@ class UserController extends Controller
       $pseudo = $_POST['pseudo'];
       $email = $_POST['email'];
       $password = $_POST['password'];
-      $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
       // Validation des données
-      if (filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($password) >= 8) {
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Email invalide.";
+      }
+
+      if (!$this->isPasswordSecure($password)) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.";
+      }
+
+      if (empty($errors)) {
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $user = new Users();
         $user->setPseudo($pseudo);
         $user->setEmail($email);
@@ -55,12 +67,78 @@ class UserController extends Controller
         $userRepository->save($user);
 
         echo "Compte créé avec succès !";
-      } else {
-        $errors[] = "Email invalide ou mot de passe trop court.";
       }
     }
     $this->render('auth/register', [
       'errors' => $errors,
     ]);
+  }
+
+  public function profile()
+  {
+    // Récupérer les informations de l'utilisateur connecté
+    // Pour l'exemple, nous allons utiliser un utilisateur fictif
+    $user = new Users();
+    $user->setPseudo('JohnDoe');
+    $user->setEmail('john.doe@example.com');
+    $user->setCredits(20);
+
+    $this->render('user/profile', [
+      'user' => $user,
+    ]);
+  }
+
+  public function edit()
+  {
+    $errors = [];
+    $userRepository = new UserRepository();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $pseudo = $_POST['pseudo'];
+      $email = $_POST['email'];
+      $password = $_POST['password'];
+
+      // Validation des données
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Email invalide.";
+      }
+
+      if (!$this->isPasswordSecure($password)) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.";
+      }
+
+      if (empty($errors)) {
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $user = new Users();
+        $user->setPseudo($pseudo);
+        $user->setEmail($email);
+        $user->setPassword($hashedPassword);
+
+        $userRepository->update($user);
+
+        echo "Informations mises à jour avec succès !";
+      }
+    } else {
+      // Récupérer les informations de l'utilisateur connecté
+      // Pour l'exemple, nous allons utiliser un utilisateur fictif
+      $user = new Users();
+      $user->setPseudo('JohnDoe');
+      $user->setEmail('john.doe@example.com');
+      $user->setCredits(20);
+    }
+
+    $this->render('user/edit', [
+      'user' => $user,
+      'errors' => $errors,
+    ]);
+  }
+
+  private function isPasswordSecure($password)
+  {
+    return strlen($password) >= 8 &&
+      preg_match('/[A-Z]/', $password) &&
+      preg_match('/[a-z]/', $password) &&
+      preg_match('/[0-9]/', $password) &&
+      preg_match('/[\W]/', $password);
   }
 }

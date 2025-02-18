@@ -33,7 +33,7 @@ use App\Tools\NavigationTools;
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Accueil</a>
+                        <a class="nav-link text-white" href="/index.php?controller=home&action=show">Accueil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Covoiturages</a>
@@ -43,6 +43,9 @@ use App\Tools\NavigationTools;
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/index.php?controller=user&action=profile">Espace Utilisateur</a>
                     </li>
                 </ul>
             </div>

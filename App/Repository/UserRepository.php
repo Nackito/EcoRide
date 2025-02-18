@@ -24,4 +24,15 @@ class UserRepository extends Repository
       $user->getCredits()
     ]);
   }
+
+  public function update(Users $user)
+  {
+    $stmt = $this->pdo->prepare("UPDATE Utilisateur SET email = ?, password = ?, pseudo = ? WHERE utilisateur_id = ?");
+    $stmt->execute([
+      $user->getEmail(),
+      $user->getPassword(),
+      $user->getPseudo(),
+      $user->getId()
+    ]);
+  }
 }
