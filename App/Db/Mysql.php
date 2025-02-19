@@ -3,52 +3,31 @@
 namespace App\Db;
 
 use PDO;
+use PDOException;
 
 class Mysql
 {
-  private $db_name;
-  private $db_user;
-  private $db_password;
-  private $db_host;
-  private $db_port;
-  private $pdo = null;
-  private static $_instance = null;
+  private $pdo;
 
   public function __construct()
   {
-    $conf = require_once _ROOTPATH_ . '/db_config.php';
+    $config = require __DIR__ . '/../../db_config.php';
+    $dbConfig = $config['db'];
 
-    if (isset($conf['db']['db_name'])) {
-      $this->db_name = $conf['db']['db_name'];
-    }
-    if (isset($conf['db']['db_user'])) {
-      $this->db_user = $conf['db']['db_user'];
-    }
-    if (isset($conf['db']['db_password'])) {
-      $this->db_password = $conf['db']['db_password'];
-    }
-    if (isset($conf['db']['db_host'])) {
-      $this->db_host = $conf['db']['db_host'];
-    }
-    if (isset($conf['db']['db_port'])) {
-      $this->db_port = $conf['db']['db_port'];
+    try {
+      $this->pdo = new PDO(
+        "mysql:host={$dbConfig['db_host']};dbname={$dbConfig['db_name']};port={$dbConfig['db_port']}",
+        $dbConfig['db_user'],
+        $dbConfig['db_password']
+      );
+      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+      throw new PDOException("Erreur de connexion à la base de données : " . $e->getMessage());
     }
   }
 
-  public static function getInstance(): self
+  public function getPDO()
   {
-    if (is_null(self::$_instance)) {
-      self::$_instance = new Mysql();
-    }
-    return self::$_instance;
-  }
-
-  public function getPDO(): PDO
-  {
-    if (is_null($this->pdo)) {
-      $dsn = 'mysql:host=' . $this->db_host . ';port=' . $this->db_port . ';dbname=' . $this->db_name;
-      $this->pdo = new PDO($dsn, $this->db_user, $this->db_password);
-    }
     return $this->pdo;
   }
 }

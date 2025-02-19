@@ -13,11 +13,11 @@ $config = [
   ],
   'heroku' => [
     'db' => [
-      'db_name' => 'bemuciesvvzsdz4n',
-      'db_user' => 'vjovxv1moy1yvoh8',
-      'db_password' => 'gkdfoteqh3qevwnr',
-      'db_host' => 'zwgaqwfn759tj79r.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
-      'db_port' => '3306',
+      'db_name' => getenv('DB_NAME'),
+      'db_user' => getenv('DB_USER'),
+      'db_password' => getenv('DB_PASSWORD'),
+      'db_host' => getenv('DB_HOST'),
+      'db_port' => getenv('DB_PORT'),
     ],
   ],
 ];
