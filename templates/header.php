@@ -48,6 +48,15 @@ use App\Tools\NavigationTools;
                         <a class="nav-link text-white" href="/index.php?controller=user&action=profile">Espace Utilisateur</a>
                     </li>
                 </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <?php if (Users::isLogged()) { ?>
+                            <a href="/index.php?controller=user&action=logout" class="nav-link text-white">Se déconnecter</a>
+                        <?php } else { ?>
+                            <a href="/index.php?controller=user&action=login" class="nav-link text-white">Se connecter</a>
+                        <?php } ?>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

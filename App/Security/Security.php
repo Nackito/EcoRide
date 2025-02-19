@@ -10,6 +10,7 @@ use App\Entity\Entity;
 
 class Security
 {
+  protected $password = '';
   public static function hash(string $password): string
   {
     return password_hash($password, PASSWORD_DEFAULT);
@@ -33,5 +34,34 @@ class Security
   public static function isAdmin(): bool
   {
     return isset($_SESSION['user']) && $_SESSION['user']['role'] === "1";
+  }
+
+  public function verifyPassword(string $password): bool
+  {
+    if (password_verify($password, $this->password)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Get the value of password
+   */
+  public function getPassword()
+  {
+    return $this->password;
+  }
+
+  /**
+   * Set the value of password
+   *
+   * @return  self
+   */
+  public function setPassword($password)
+  {
+    $this->password = $password;
+
+    return $this;
   }
 }

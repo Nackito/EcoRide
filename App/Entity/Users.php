@@ -16,6 +16,14 @@ class Users extends Entity
   protected ?string $role = '';
   protected ?int $credits = 20; // Ajout de la propriété credits
   protected ?string $pseudo = ''; // Ajout de la propriété pseudo
+  protected array $roles = []; // Ajout de la propriété roles
+  protected ?string $immatriculation = ''; // Ajout de la propriété immatriculation
+  protected ?string $datePremiereImmatriculation = ''; // Ajout de la propriété datePremiereImmatriculation
+  protected ?string $modele = ''; // Ajout de la propriété modele
+  protected ?string $couleur = ''; // Ajout de la propriété couleur
+  protected ?string $marque = ''; // Ajout de la propriété marque
+  protected ?int $nbPlace = 0; // Ajout de la propriété nbPlace
+  protected ?string $preferences = ''; // Ajout de la propriété preferences
 
   /**
    * Get the value of id
@@ -260,5 +268,136 @@ class Users extends Entity
   public static function isLogged(): bool
   {
     return isset($_SESSION['user']);
+  }
+
+  /**
+   * Get the value of roles
+   */
+  public function getRoles()
+  {
+    return $this->roles;
+  }
+
+  /**
+   * Set the value of roles
+   *
+   * @return  self
+   */
+  public function setRoles($roles)
+  {
+    $this->roles = $roles;
+
+    return $this;
+  }
+
+  public function getImmatriculation()
+  {
+    return $this->immatriculation;
+  }
+
+  public function setImmatriculation($immatriculation)
+  {
+    $this->immatriculation = $immatriculation;
+    return $this;
+  }
+
+  public function getDatePremiereImmatriculation()
+  {
+    return $this->datePremiereImmatriculation;
+  }
+
+  public function setDatePremiereImmatriculation($datePremiereImmatriculation)
+  {
+    $this->datePremiereImmatriculation = $datePremiereImmatriculation;
+    return $this;
+  }
+
+  public function getModele()
+  {
+    return $this->modele;
+  }
+
+  public function setModele($modele)
+  {
+    $this->modele = $modele;
+    return $this;
+  }
+
+  public function getCouleur()
+  {
+    return $this->couleur;
+  }
+
+  public function setCouleur($couleur)
+  {
+    $this->couleur = $couleur;
+    return $this;
+  }
+
+  public function getMarque()
+  {
+    return $this->marque;
+  }
+
+  public function setMarque($marque)
+  {
+    $this->marque = $marque;
+    return $this;
+  }
+
+  public function getNbPlace()
+  {
+    return $this->nbPlace;
+  }
+
+  public function setNbPlace($nbPlace)
+  {
+    $this->nbPlace = $nbPlace;
+    return $this;
+  }
+
+  public function getPreferences()
+  {
+    return $this->preferences;
+  }
+
+  public function setPreferences($preferences)
+  {
+    $this->preferences = $preferences;
+    return $this;
+  }
+
+  public static function hash(string $password): string
+  {
+    return password_hash($password, PASSWORD_DEFAULT);
+  }
+
+  public static function verify(string $password, string $hash): bool
+  {
+    return password_verify($password, $hash);
+  }
+
+  public static function isUser(): bool
+  {
+    return isset($_SESSION['user']) && $_SESSION['user']['role'] === "2";
+  }
+
+  public static function isEmployed(): bool
+  {
+    return isset($_SESSION['user']) && $_SESSION['user']['role'] === "3";
+  }
+
+  public static function isAdmin(): bool
+  {
+    return isset($_SESSION['user']) && $_SESSION['user']['role'] === "1";
+  }
+
+  public function verifyPassword(string $password): bool
+  {
+    if (password_verify($password, $this->password)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
