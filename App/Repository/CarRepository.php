@@ -11,7 +11,7 @@ class CarRepository extends Repository
 
   public function findCarsByUserId($userId)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM voiture WHERE utilisateur_id = ?");
+    $stmt = $this->pdo->prepare("SELECT * FROM Voiture WHERE utilisateur_id = ?");
     $stmt->execute([$userId]);
     $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

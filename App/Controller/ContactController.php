@@ -3,9 +3,8 @@
 namespace App\Controller;
 
 use Exception;
-use App\Controller\Controller;
 
-class HomeController extends Controller
+class ContactController extends Controller
 {
   public function route(): void
   {
@@ -37,9 +36,9 @@ class HomeController extends Controller
   public function show(): void
   {
     $params = [
-      'title' => 'Accueil',
-      'content' => 'Bienvenue sur la page d\'accueil'
+      'title' => 'Contact',
+      'content' => 'Bienvenue sur la page de contact'
     ];
-    $this->render('home/home', $params);
+    $this->render('contact/contact', $params);
   }
 }

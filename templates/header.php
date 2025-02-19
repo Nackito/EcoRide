@@ -26,7 +26,7 @@ use App\Tools\NavigationTools;
 
     <nav class="navbar navbar-expand-lg navbar-light bg-success">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" href="#">EcoRide</a>
+            <a class="navbar-brand text-white" href="/index.php?controller=home&action=show">EcoRide</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,8 +35,19 @@ use App\Tools\NavigationTools;
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/index.php?controller=home&action=show">Accueil</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/index.php?controller=trip&action=create">Covoiturages</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="/index.php?controller=trip&action=search" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Rechercher un covoiturage
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <?php if (isset($_SESSION['user']['id'])): ?>
+                                <li><a class="dropdown-item" href="/index.php?controller=trip&action=history">Historique de covoiturage</a></li>
+                                <li><a class="dropdown-item" href="/index.php?controller=trip&action=create">Nouveau covoiturage</a></li>
+                            <?php else: ?>
+                                <li><a class="dropdown-item" href="/index.php?controller=user&action=register">Historique de covoiturage</a></li>
+                                <li><a class="dropdown-item" href="/index.php?controller=user&action=register">Nouveau covoiturage</a></li>
+                            <?php endif; ?>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Contact</a>
@@ -47,7 +58,7 @@ use App\Tools\NavigationTools;
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <?php if (Users::isLogged()) { ?>
+                        <?php if (isset($_SESSION['user']['id'])) { ?>
                             <a href="/index.php?controller=user&action=logout" class="nav-link text-white">Se déconnecter</a>
                         <?php } else { ?>
                             <a href="/index.php?controller=user&action=login" class="nav-link text-white">Se connecter</a>
@@ -57,3 +68,6 @@ use App\Tools\NavigationTools;
             </div>
         </div>
     </nav>
+</body>
+
+</html>

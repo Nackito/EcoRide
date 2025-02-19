@@ -19,12 +19,20 @@
           <?php endif; ?>
           <form method="POST" action="">
             <div class="form-group">
+              <label for="departure">Lieu de départ:</label>
+              <input type="text" class="form-control" id="departure" name="departure" required>
+            </div>
+            <div class="form-group">
               <label for="date_depart">Date de départ:</label>
               <input type="date" class="form-control" id="date_depart" name="date_depart" required>
             </div>
             <div class="form-group">
               <label for="heure_depart">Heure de départ:</label>
               <input type="time" class="form-control" id="heure_depart" name="heure_depart" required>
+            </div>
+            <div class="form-group">
+              <label for="destination">Lieu d'arrivée:</label>
+              <input type="text" class="form-control" id="destination" name="destination" required>
             </div>
             <div class="form-group">
               <label for="date_arrivee">Date d'arrivée:</label>
@@ -41,6 +49,10 @@
             <div class="form-group">
               <label for="nb_place">Nombre de places disponibles:</label>
               <input type="number" class="form-control" id="nb_place" name="nb_place" required>
+            </div>
+            <div class="form-group">
+              <label for="price">Prix par place:</label>
+              <input type="number" class="form-control" id="price" name="price" required>
             </div>
             <div class="form-group">
               <label for="car">Voiture:</label>

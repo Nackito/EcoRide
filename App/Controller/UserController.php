@@ -213,6 +213,7 @@ class UserController extends Controller
           'firstname' => $user->getFirstName(),
           'email' => $user->getEmail(),
           'role' => $user->getRole(),
+          'credits' => $user->getCredits(),
         ];
         header('Location: index.php?controller=user&action=profile');
         exit();

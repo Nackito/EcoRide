@@ -16,7 +16,8 @@ class Controller
             $Controller = new HomeController();
             $Controller->route();
           case 'contact':
-            $this->render('contact');
+            $Controller = new ContactController();
+            $Controller->route();
             break;
           case 'about':
             $this->render('about');
@@ -36,7 +37,7 @@ class Controller
       } else {
         //$Controller = new HomeController();
         //$Controller->route();
-        $this->render('home/show');
+        $this->render('home/home');
       }
     } catch (Exception $e) {
       $this->render('errors/default', [
