@@ -36,10 +36,7 @@ use App\Tools\NavigationTools;
                         <a class="nav-link text-white" href="/index.php?controller=home&action=show">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Covoiturages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Connexion</a>
+                        <a class="nav-link text-white" href="/index.php?controller=trip&action=create">Covoiturages</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Contact</a>

@@ -28,6 +28,10 @@ class Controller
             $Controller = new UserController();
             $Controller->route();
             break;
+          case 'trip':
+            $Controller = new TripController();
+            $Controller->route();
+            break;
         }
       } else {
         //$Controller = new HomeController();
