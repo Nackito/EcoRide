@@ -8,24 +8,35 @@
           <h4>Rechercher un covoiturage</h4>
         </div>
         <div class="card-body">
-          <form method="GET" action="/index.php?controller=trip&action=search" class="mb-5">
+          <form method="GET" action="/index.php" class="mb-5">
+            <input type="hidden" name="controller" value="trip">
+            <input type="hidden" name="action" value="search">
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="departure">Adresse de départ:</label>
-                  <input type="text" class="form-control" id="departure" name="departure" placeholder="Ville de départ" required>
+                  <input type="text" class="form-control <?= (isset($errors['departure']) ? 'is-invalid' : '') ?>" id="departure" name="departure" placeholder="Ville de départ" required>
+                  <?php if (isset($errors['departure'])) { ?>
+                    <div class="invalid-feedback"><?= $errors['departure'] ?></div>
+                  <?php } ?>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="destination">Adresse d'arrivée:</label>
-                  <input type="text" class="form-control" id="destination" name="destination" placeholder="Ville de destination" required>
+                  <input type="text" class="form-control <?= (isset($errors['destination']) ? 'is-invalid' : '') ?>" id="destination" name="destination" placeholder="Ville de destination" required>
+                  <?php if (isset($errors['destination'])) { ?>
+                    <div class="invalid-feedback"><?= $errors['destination'] ?></div>
+                  <?php } ?>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="date">Date:</label>
-                  <input type="date" class="form-control" id="date" name="date">
+                  <input type="date" class="form-control <?= (isset($errors['date']) ? 'is-invalid' : '') ?>" id="date" name="date">
+                  <?php if (isset($errors['date'])) { ?>
+                    <div class="invalid-feedback"><?= $errors['date'] ?></div>
+                  <?php } ?>
                 </div>
               </div>
             </div>

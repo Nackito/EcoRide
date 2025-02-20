@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Trip;
 use App\Db\Mysql;
+use App\Tools\StringTools;
 use PDO;
 
 class TripRepository extends Repository
@@ -133,31 +134,29 @@ class TripRepository extends Repository
     return $tripObjects;
   }
 
-  public function findByRouteAndDate($departure, $destination, $date = null)
+  public function findByRouteAndDate($departure, $destination, $date)
   {
-    if ($date) {
-      $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie 
+    $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie, c.nb_place
                                 FROM Covoiturage c
                                 LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
                                 LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
-                                WHERE c.lieu_depart = ? AND c.lieu_arrive = ? AND c.date_depart = ?");
-      $stmt->execute([$departure, $destination, $date]);
-    } else {
-      $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie 
-                                FROM Covoiturage c
-                                LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
-                                LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
-                                WHERE c.lieu_depart = ? AND c.lieu_arrive = ? AND c.date_depart >= CURDATE()");
-      $stmt->execute([$departure, $destination]);
-    }
+                                WHERE c.lieu_depart = :depart AND c.lieu_arrive = :arrivee AND c.date_depart = :date
+                                ORDER BY c.heure_depart ASC");
+    // Execution et récupération des resultats
+    $stmt->bindValue(':depart', $departure, PDO::PARAM_STR);
+    $stmt->bindValue(':arrivee', $destination, PDO::PARAM_STR);
+    $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+    $stmt->execute();
     $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $tripObjects = [];
     foreach ($trips as $trip) {
       $tripObj = new Trip();
       $tripObj->setId($trip['covoiturage_id']);
+      $tripObj->setDeparture($trip['lieu_depart']);
       $tripObj->setDateDepart($trip['date_depart']);
       $tripObj->setHeureDepart($trip['heure_depart']);
+      $tripObj->setDestination($trip['lieu_arrive']);
       $tripObj->setDateArrivee($trip['date_arrivee']);
       $tripObj->setHeureArrivee($trip['heure_arrivee']);
       $tripObj->setStatut($trip['statut']);

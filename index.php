@@ -2,6 +2,8 @@
 
 use App\Db\Mysql;
 use App\Controller\Controller;
+use App\Controller\HomeController;
+use App\Controller\TripController;
 
 require_once __DIR__ . '/vendor/autoload.php';
 

@@ -20,10 +20,12 @@
                   <th>Nombre de places restantes</th>
                   <th>Prix</th>
                   <th>Date de départ</th>
-                  <th>Heure de départ</th>
                   <th>Date d'arrivée</th>
-                  <th>Heure d'arrivée</th>
+                  <th>Heure de départ</th>
                   <th>Voyage écologique</th>
+                  <th>Ville d'arrivée</th>
+                  <th>Ville de depart</th>
+                  <th>Heure d'arrivée</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -36,9 +38,11 @@
                     <td><?php echo htmlspecialchars($trip->getNbPlace()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getPrice()); ?> euro(s)</td>
                     <td><?php echo htmlspecialchars($trip->getDateDepart()); ?></td>
-                    <td><?php echo htmlspecialchars($trip->getHeureDepart()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getDateArrivee()); ?></td>
+                    <td><?php echo htmlspecialchars($trip->getHeureDepart()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getHeureArrivee()); ?></td>
+                    <td><?php echo htmlspecialchars($trip->getDeparture()); ?></td>
+                    <td><?php echo htmlspecialchars($trip->getDestination()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getEnergie() == 'électrique' ? 'Oui' : 'Non'); ?></td>
                     <td><a href="/index.php?controller=trip&action=detail&trip_id=<?php echo $trip->getId(); ?>" class="btn btn-primary">Détails</a></td>
                   </tr>

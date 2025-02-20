@@ -37,7 +37,7 @@ use App\Tools\NavigationTools;
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="/index.php?controller=trip&action=search" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Rechercher un covoiturage
+                            Covoiturage
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <?php if (isset($_SESSION['user']['id'])): ?>
@@ -57,6 +57,11 @@ use App\Tools\NavigationTools;
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <?php if (!isset($_SESSION['user']['id'])) { ?>
+                            <a href="/index.php?controller=user&action=register" class="nav-link text-white">S'inscrire</a>
+                        <?php } ?>
+                    </li>
                     <li class="nav-item">
                         <?php if (isset($_SESSION['user']['id'])) { ?>
                             <a href="/index.php?controller=user&action=logout" class="nav-link text-white">Se déconnecter</a>

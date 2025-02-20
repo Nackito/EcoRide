@@ -30,6 +30,9 @@ class TripController extends Controller
           case 'search':
             $this->search();
             break;
+          case 'search_results':
+            $this->search_results();
+            break;
           default:
             throw new Exception("Cette action n'existe pas : " . $_GET['action']);
         }
@@ -173,9 +176,16 @@ class TripController extends Controller
   public function search()
   {
     try {
+      $errors = [];
       $departure = $_GET['departure'] ?? null;
       $destination = $_GET['destination'] ?? null;
       $date = $_GET['date'] ?? null;
+
+      if (empty($departure) || empty($destination) || empty($date)) {
+        $errors[] = 'Tous les champs sont obligatoires.';
+        $this->render('home/home', ['errors' => $errors]);
+        return;
+      }
 
       $tripRepository = new TripRepository();
       $trips = $tripRepository->findByRouteAndDate($departure, $destination, $date);
@@ -191,5 +201,15 @@ class TripController extends Controller
         'error' => $e->getMessage()
       ]);
     }
+  }
+
+  public function search_results()
+  {
+    $tripRepository = new TripRepository();
+    $trips = $tripRepository->findAll();
+
+    $this->render('trip/search_results', [
+      'trips' => $trips
+    ]);
   }
 }
