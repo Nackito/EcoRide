@@ -45,7 +45,7 @@
           <div class="row mt-5">
             <div class="col-md-4">
               <div class="card">
-                <img src="path/to/your/image1.jpg" class="card-img-top" alt="Image 1">
+                <img src="assets/images/image1.jpg" class="card-img-top" alt="Image 1">
                 <div class="card-body">
                   <h5 class="card-title">Réduisez votre empreinte carbone</h5>
                   <p class="card-text">En partageant vos trajets, vous contribuez à la réduction des émissions de CO2.</p>
@@ -54,7 +54,7 @@
             </div>
             <div class="col-md-4">
               <div class="card">
-                <img src="path/to/your/image2.jpg" class="card-img-top" alt="Image 2">
+                <img src="assets/images/image2.jpg" class="card-img-top" alt="Image 2">
                 <div class="card-body">
                   <h5 class="card-title">Économisez de l'argent</h5>
                   <p class="card-text">Le covoiturage est une solution économique pour vos déplacements quotidiens.</p>
@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-4">
               <div class="card">
-                <img src="path/to/your/image3.jpg" class="card-img-top" alt="Image 3">
+                <img src="assets/images/image3.jpg" class="card-img-top" alt="Image 3">
                 <div class="card-body">
                   <h5 class="card-title">Rencontrez de nouvelles personnes</h5>
                   <p class="card-text">Le covoiturage est une excellente occasion de rencontrer des personnes partageant les mêmes idées.</p>
