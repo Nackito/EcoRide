@@ -23,6 +23,7 @@
                   <th>Date d'arrivée</th>
                   <th>Heure de départ</th>
                   <th>Voyage écologique</th>
+                  <th>Durée du trajet</th>
                   <th>Ville d'arrivée</th>
                   <th>Ville de depart</th>
                   <th>Heure d'arrivée</th>
@@ -44,6 +45,7 @@
                     <td><?php echo htmlspecialchars($trip->getDeparture()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getDestination()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getEnergie() == 'électrique' ? 'Oui' : 'Non'); ?></td>
+                    <td><?php echo htmlspecialchars($trip->getDuree()); ?></td>
                     <td><a href="/index.php?controller=trip&action=detail&trip_id=<?php echo $trip->getId(); ?>" class="btn btn-primary">Détails</a></td>
                   </tr>
                 <?php endforeach; ?>

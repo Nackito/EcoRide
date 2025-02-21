@@ -180,6 +180,10 @@ class TripController extends Controller
       $departure = $_GET['departure'] ?? null;
       $destination = $_GET['destination'] ?? null;
       $date = $_GET['date'] ?? null;
+      $ecologique = $_GET['ecologique'] ?? null;
+      $prix_max = $_GET['prix_max'] ?? null;
+      $duree_max = $_GET['duree_max'] ?? null;
+      $note_min = $_GET['note_min'] ?? null;
 
       if (empty($departure) || empty($destination) || empty($date)) {
         $errors[] = 'Tous les champs sont obligatoires.';
@@ -188,13 +192,17 @@ class TripController extends Controller
       }
 
       $tripRepository = new TripRepository();
-      $trips = $tripRepository->findByRouteAndDate($departure, $destination, $date);
+      $trips = $tripRepository->findByRouteAndDate($departure, $destination, $date, $ecologique, $prix_max, $duree_max, $note_min);
 
       $this->render('trip/search_results', [
         'trips' => $trips,
         'departure' => $departure,
         'destination' => $destination,
-        'date' => $date
+        'date' => $date,
+        'ecologique' => $ecologique,
+        'prix_max' => $prix_max,
+        'duree_max' => $duree_max,
+        'note_min' => $note_min
       ]);
     } catch (Exception $e) {
       $this->render('errors/default', [

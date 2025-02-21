@@ -134,18 +134,46 @@ class TripRepository extends Repository
     return $tripObjects;
   }
 
-  public function findByRouteAndDate($departure, $destination, $date)
+  public function findByRouteAndDate($departure, $destination, $date, $ecologique = null, $prix_max = null, $duree_max = null, $note_min = null)
   {
-    $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie, c.nb_place
-                                FROM Covoiturage c
-                                LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
-                                LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
-                                WHERE c.lieu_depart = :depart AND c.lieu_arrive = :arrivee AND c.date_depart = :date
-                                ORDER BY c.heure_depart ASC");
+    $query = "SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie, c.nb_place,
+              TIMEDIFF(c.heure_arrivee, c.heure_depart) AS duree
+              FROM Covoiturage c
+              LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
+              LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
+              WHERE c.lieu_depart = :depart AND c.lieu_arrive = :arrivee AND c.date_depart = :date";
+
+    if ($ecologique !== null) {
+      $query .= " AND v.energie = 'électrique'";
+    }
+    if ($prix_max !== null) {
+      $query .= " AND c.prix <= :prix_max";
+    }
+    if ($duree_max !== null) {
+      $query .= " AND TIMESTAMPDIFF(HOUR, c.date_depart, c.date_arrivee) <= :duree_max";
+    }
+    if ($note_min !== null) {
+      $query .= " AND u.note >= :note_min";
+    }
+
+    $query .= " ORDER BY c.heure_depart ASC";
+
+    $stmt = $this->pdo->prepare($query);
     // Execution et récupération des resultats
     $stmt->bindValue(':depart', $departure, PDO::PARAM_STR);
     $stmt->bindValue(':arrivee', $destination, PDO::PARAM_STR);
     $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+
+    if ($prix_max !== null) {
+      $stmt->bindValue(':prix_max', $prix_max, PDO::PARAM_INT);
+    }
+    if ($duree_max !== null) {
+      $stmt->bindValue(':duree_max', $duree_max, PDO::PARAM_INT);
+    }
+    if ($note_min !== null) {
+      $stmt->bindValue(':note_min', $note_min, PDO::PARAM_STR);
+    }
+
     $stmt->execute();
     $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

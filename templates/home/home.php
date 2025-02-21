@@ -41,6 +41,36 @@
               </div>
             </div>
             <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="ecologique">Voyage écologique:</label>
+                  <select class="form-control" id="ecologique" name="ecologique">
+                    <option value="">Tous</option>
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="prix_max">Prix maximum:</label>
+                  <input type="number" class="form-control" id="prix_max" name="prix_max" placeholder="Prix maximum">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="duree_max">Durée maximum (heures):</label>
+                  <input type="number" class="form-control" id="duree_max" name="duree_max" placeholder="Durée maximum">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="note_min">Note minimum:</label>
+                  <input type="number" class="form-control" id="note_min" name="note_min" placeholder="Note minimum" step="0.1" min="0" max="5">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-success btn-block">Rechercher</button>
               </div>
