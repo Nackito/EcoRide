@@ -41,6 +41,9 @@
                     <td><?php echo htmlspecialchars($trip->getPrice()); ?> euro(s)</td>
                     <td><?php echo htmlspecialchars($trip->getModele()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getPseudo()); ?></td>
+                    <th>
+                      <a href="/index.php?controller=trip&action=accept&trip_id=<?php echo $trip->getId(); ?>" class="btn btn-success">Accepter</a>
+                    </th>
                   </tr>
                 <?php endforeach; ?>
               </tbody>

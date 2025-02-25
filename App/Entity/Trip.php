@@ -21,6 +21,7 @@ class Trip extends Entity
   protected ?string $energie = ''; // Ajout de l'énergie de la voiture
   protected ?int $note = 0; // Ajout de la note de l'utilisateur
   protected ?string $photo = ''; // Ajout de la photo de l'utilisateur
+  protected ?string $duree = ''; // Ajout de la durée du trajet
 
   public function getId()
   {
@@ -277,6 +278,26 @@ class Trip extends Entity
   public function setPhoto($photo)
   {
     $this->photo = $photo;
+
+    return $this;
+  }
+
+  /**
+   * Get the value of duree
+   */
+  public function getDuree()
+  {
+    return $this->duree;
+  }
+
+  /**
+   * Set the value of duree
+   *
+   * @return  self
+   */
+  public function setDuree($duree)
+  {
+    $this->duree = $duree;
 
     return $this;
   }

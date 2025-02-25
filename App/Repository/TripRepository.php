@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Trip;
 use App\Db\Mysql;
+use App\Tools\StringTools;
 use PDO;
 
 class TripRepository extends Repository
@@ -30,8 +31,10 @@ class TripRepository extends Repository
     foreach ($trips as $trip) {
       $tripObj = new Trip();
       $tripObj->setId($trip['covoiturage_id']);
+      $tripObj->setDeparture($trip['lieu_depart']);
       $tripObj->setDateDepart($trip['date_depart']);
       $tripObj->setHeureDepart($trip['heure_depart']);
+      $tripObj->setDestination($trip['lieu_arrive']);
       $tripObj->setDateArrivee($trip['date_arrivee']);
       $tripObj->setHeureArrivee($trip['heure_arrivee']);
       $tripObj->setStatut($trip['statut']);
@@ -72,32 +75,61 @@ class TripRepository extends Repository
     ]);
   }
 
-  public function findById($tripId)
+  public function findById($id)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM Covoiturage WHERE covoiturage_id = ?");
-    $stmt->execute([$tripId]);
+    $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, v.modele, v.energie, c.nb_place,
+              AVG(a.note) AS note, TIMEDIFF(c.heure_arrivee, c.heure_depart) AS duree
+              FROM Covoiturage c
+              LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
+              LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
+              LEFT JOIN Avis a ON u.utilisateur_id = a.utilisateur_id
+              WHERE c.covoiturage_id = :id
+              GROUP BY c.covoiturage_id, u.utilisateur_id, v.voiture_id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
     $trip = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($trip) {
       $tripObj = new Trip();
       $tripObj->setId($trip['covoiturage_id']);
-      $tripObj->setDeparture($trip['departure']);
+      $tripObj->setDeparture($trip['lieu_depart']);
       $tripObj->setDateDepart($trip['date_depart']);
       $tripObj->setHeureDepart($trip['heure_depart']);
-      $tripObj->setDestination($trip['destination']);
+      $tripObj->setDestination($trip['lieu_arrive']);
       $tripObj->setDateArrivee($trip['date_arrivee']);
       $tripObj->setHeureArrivee($trip['heure_arrivee']);
       $tripObj->setStatut($trip['statut']);
       $tripObj->setNbPlace($trip['nb_place']);
       $tripObj->setPrice($trip['prix']);
       $tripObj->setUtilisateurId($trip['utilisateur_id']);
-      $tripObj->setCarId($trip['car_id']);
+      $tripObj->setCarId($trip['voiture_id']);
       $tripObj->setPseudo($trip['pseudo']);
+      $tripObj->setPhoto($trip['photo']);
+      $tripObj->setNote($trip['note']);
       $tripObj->setModele($trip['modele']);
+      $tripObj->setEnergie($trip['energie']);
+      $tripObj->setDuree($trip['duree']);
       return $tripObj;
     }
 
     return null;
+  }
+
+  public function hasUserAcceptedTrip($userId, $tripId)
+  {
+    $stmt = $this->pdo->prepare("SELECT * FROM Covoiturage_Acceptation WHERE utilisateur_id = :user_id AND covoiturage_id = :trip_id");
+    $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindValue(':trip_id', $tripId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
+  }
+
+  public function acceptTrip($userId, $tripId)
+  {
+    $stmt = $this->pdo->prepare("INSERT INTO Covoiturage_Acceptation (utilisateur_id, covoiturage_id) VALUES (:user_id, :trip_id)");
+    $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindValue(':trip_id', $tripId, PDO::PARAM_INT);
+    $stmt->execute();
   }
 
   public function findAll()
@@ -133,31 +165,57 @@ class TripRepository extends Repository
     return $tripObjects;
   }
 
-  public function findByRouteAndDate($departure, $destination, $date = null)
+  public function findByRouteAndDate($departure, $destination, $date, $ecologique = null, $prix_max = null, $duree_max = null, $note_min = null)
   {
-    if ($date) {
-      $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie 
-                                FROM Covoiturage c
-                                LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
-                                LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
-                                WHERE c.lieu_depart = ? AND c.lieu_arrive = ? AND c.date_depart = ?");
-      $stmt->execute([$departure, $destination, $date]);
-    } else {
-      $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, u.note, v.modele, v.energie 
-                                FROM Covoiturage c
-                                LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
-                                LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
-                                WHERE c.lieu_depart = ? AND c.lieu_arrive = ? AND c.date_depart >= CURDATE()");
-      $stmt->execute([$departure, $destination]);
+    $query = "SELECT c.*, u.pseudo, u.photo, v.modele, v.energie, c.nb_place,
+              AVG(a.note) AS note, TIMEDIFF(c.heure_arrivee, c.heure_depart) AS duree
+              FROM Covoiturage c
+              LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
+              LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
+              LEFT JOIN Avis a ON u.utilisateur_id = a.utilisateur_id
+              WHERE c.lieu_depart = :depart AND c.lieu_arrive = :arrivee AND c.date_depart = :date";
+    $query .= " GROUP BY c.covoiturage_id, c.heure_depart, c.heure_arrivee, c.nb_place, u.pseudo, u.photo, v.modele, v.energie";
+
+    if ($ecologique !== null) {
+      $query .= " AND v.energie = 'électrique'";
     }
+    if ($prix_max !== null) {
+      $query .= " AND c.prix <= :prix_max";
+    }
+    if ($duree_max !== null) {
+      $query .= " AND TIMESTAMPDIFF(HOUR, c.heure_depart, c.heure_arrivee) <= :duree_max";
+    }
+    if ($note_min !== null) {
+      $query .= " HAVING AVG(a.note) >= :note_min";
+    }
+
+
+    $stmt = $this->pdo->prepare($query);
+    $stmt->bindValue(':depart', $departure, PDO::PARAM_STR);
+    $stmt->bindValue(':arrivee', $destination, PDO::PARAM_STR);
+    $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+
+    if ($prix_max !== null) {
+      $stmt->bindValue(':prix_max', $prix_max, PDO::PARAM_INT);
+    }
+    if ($duree_max !== null) {
+      $stmt->bindValue(':duree_max', $duree_max, PDO::PARAM_INT);
+    }
+    if ($note_min !== null) {
+      $stmt->bindValue(':note_min', $note_min, PDO::PARAM_STR);
+    }
+
+    $stmt->execute();
     $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $tripObjects = [];
     foreach ($trips as $trip) {
       $tripObj = new Trip();
       $tripObj->setId($trip['covoiturage_id']);
+      $tripObj->setDeparture($trip['lieu_depart']);
       $tripObj->setDateDepart($trip['date_depart']);
       $tripObj->setHeureDepart($trip['heure_depart']);
+      $tripObj->setDestination($trip['lieu_arrive']);
       $tripObj->setDateArrivee($trip['date_arrivee']);
       $tripObj->setHeureArrivee($trip['heure_arrivee']);
       $tripObj->setStatut($trip['statut']);
@@ -170,9 +228,20 @@ class TripRepository extends Repository
       $tripObj->setNote($trip['note']);
       $tripObj->setModele($trip['modele']);
       $tripObj->setEnergie($trip['energie']);
+      $tripObj->setDuree($trip['duree']);
       $tripObjects[] = $tripObj;
     }
 
     return $tripObjects;
+  }
+
+  public function findReviewsByUserId($userId)
+  {
+    $stmt = $this->pdo->prepare("SELECT a.*, u.pseudo FROM Avis a
+                                LEFT JOIN Utilisateur u ON a.utilisateur_id = u.utilisateur_id
+                                WHERE a.utilisateur_id = :user_id");
+    $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }

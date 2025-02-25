@@ -22,9 +22,6 @@ class Controller
           case 'about':
             $this->render('about');
             break;
-          default:
-            $this->render('errors/404');
-            break;
           case 'user':
             $Controller = new UserController();
             $Controller->route();
@@ -33,11 +30,14 @@ class Controller
             $Controller = new TripController();
             $Controller->route();
             break;
+          default:
+            $this->render('errors/404');
+            break;
         }
       } else {
-        //$Controller = new HomeController();
-        //$Controller->route();
-        $this->render('home/home');
+        $Controller = new HomeController();
+        $Controller->route();
+        //$this->render('home/home');
       }
     } catch (Exception $e) {
       $this->render('errors/default', [

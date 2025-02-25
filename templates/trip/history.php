@@ -24,6 +24,7 @@
                   <th>Nombre de places</th>
                   <th>Prix par place</th>
                   <th>Voiture</th>
+                  <th>Durée du trajet</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -40,6 +41,7 @@
                     <td><?php echo htmlspecialchars($trip->getNbPlace()); ?></td>
                     <td><?php echo htmlspecialchars($trip->getPrice()); ?> euro(s)</td>
                     <td><?php echo htmlspecialchars($trip->getModele()); ?></td>
+                    <td><?php echo htmlspecialchars($trip->getDuree()); ?></td>
                     <td>
                       <a href="/index.php?controller=trip&action=cancel&trip_id=<?php echo $trip->getId(); ?>" class="btn btn-danger">Annuler</a>
                     </td>

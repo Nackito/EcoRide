@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-4 col-sm">
                 <img class="me-5 imghead"
-                    src="assets/images/Logo.svg"
+                    src="assets/images/logo.svg"
                     alt="Logo EcoRide" />
                 <p class="redressed pt-3">57 Rue de la paix, Riviera, Abidjan 1001</p>
                 <p class="redressed">(225) 02-35-51-62</p>
