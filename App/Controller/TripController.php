@@ -33,6 +33,9 @@ class TripController extends Controller
           case 'search_results':
             $this->search_results();
             break;
+          case 'accept':
+            $this->accept();
+            break;
           default:
             throw new Exception("Cette action n'existe pas : " . $_GET['action']);
         }
@@ -219,5 +222,41 @@ class TripController extends Controller
     $this->render('trip/search_results', [
       'trips' => $trips
     ]);
+  }
+
+  public function accept()
+  {
+    try {
+      $tripId = $_GET['trip_id'] ?? null;
+      $userId = $_SESSION['user_id'] ?? null;
+
+      if (!$tripId || !$userId) {
+        throw new Exception('Paramètres manquants.');
+      }
+
+      $tripRepository = new TripRepository();
+      $trip = $tripRepository->findById($tripId);
+
+      if (!$trip) {
+        throw new Exception('Covoiturage non trouvé.');
+      }
+
+      // Vérifiez si l'utilisateur a déjà accepté ce covoiturage
+      if ($tripRepository->hasUserAcceptedTrip($userId, $tripId)) {
+        throw new Exception('Vous avez déjà accepté ce covoiturage.');
+      }
+
+      // Accepter le covoiturage
+      $tripRepository->acceptTrip($userId, $tripId);
+
+      // Rediriger vers la page des résultats de recherche avec un message de succès
+      $_SESSION['success_message'] = 'Covoiturage accepté avec succès.';
+      header('Location: /index.php?controller=trip&action=search');
+      exit;
+    } catch (Exception $e) {
+      $this->render('errors/default', [
+        'error' => $e->getMessage()
+      ]);
+    }
   }
 }
