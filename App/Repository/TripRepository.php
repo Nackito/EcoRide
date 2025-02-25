@@ -75,10 +75,17 @@ class TripRepository extends Repository
     ]);
   }
 
-  public function findById($tripId)
+  public function findById($id)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM Covoiturage WHERE covoiturage_id = :trip_id");
-    $stmt->bindValue(':trip_id', $tripId, PDO::PARAM_INT);
+    $stmt = $this->pdo->prepare("SELECT c.*, u.pseudo, u.photo, v.modele, v.energie, c.nb_place,
+              AVG(a.note) AS note, TIMEDIFF(c.heure_arrivee, c.heure_depart) AS duree
+              FROM Covoiturage c
+              LEFT JOIN Utilisateur u ON c.utilisateur_id = u.utilisateur_id
+              LEFT JOIN Voiture v ON c.voiture_id = v.voiture_id
+              LEFT JOIN Avis a ON u.utilisateur_id = a.utilisateur_id
+              WHERE c.covoiturage_id = :id
+              GROUP BY c.covoiturage_id, u.utilisateur_id, v.voiture_id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $trip = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -96,6 +103,12 @@ class TripRepository extends Repository
       $tripObj->setPrice($trip['prix']);
       $tripObj->setUtilisateurId($trip['utilisateur_id']);
       $tripObj->setCarId($trip['voiture_id']);
+      $tripObj->setPseudo($trip['pseudo']);
+      $tripObj->setPhoto($trip['photo']);
+      $tripObj->setNote($trip['note']);
+      $tripObj->setModele($trip['modele']);
+      $tripObj->setEnergie($trip['energie']);
+      $tripObj->setDuree($trip['duree']);
       return $tripObj;
     }
 
@@ -220,5 +233,15 @@ class TripRepository extends Repository
     }
 
     return $tripObjects;
+  }
+
+  public function findReviewsByUserId($userId)
+  {
+    $stmt = $this->pdo->prepare("SELECT a.*, u.pseudo FROM Avis a
+                                LEFT JOIN Utilisateur u ON a.utilisateur_id = u.utilisateur_id
+                                WHERE a.utilisateur_id = :user_id");
+    $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }
